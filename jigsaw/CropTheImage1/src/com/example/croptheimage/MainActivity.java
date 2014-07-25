@@ -5,9 +5,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.R.integer;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -123,17 +125,20 @@ public class MainActivity extends Activity {
 	}
 
 	private class ImageViewListener implements OnClickListener {
+		@SuppressLint("NewApi")
 		public void onClick(View v) {
 			choose++;
 			if (choose % 2 == 1) {
 				choose_id1 = v.getId();
 				// Log.i(TAG, "--"+id1);
 				no1 = (ImageView) findViewById(choose_id1);
+				no1.setBackgroundResource(R.drawable.selected_border);
 				chooseimage1 = ((BitmapDrawable) no1.getDrawable()).getBitmap();// 從ImageView裡取得Image
 			}
 			if (choose % 2 == 0) {
 				choose_id2 = v.getId();
 				// Log.i(TAG, "--"+id2);
+				no1.setBackgroundColor(Color.TRANSPARENT);
 				no2 = (ImageView) findViewById(choose_id2);
 				chooseimage2 = ((BitmapDrawable) no2.getDrawable()).getBitmap();
 				no1.setImageBitmap(chooseimage2);
