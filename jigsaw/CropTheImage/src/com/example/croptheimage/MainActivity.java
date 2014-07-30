@@ -152,11 +152,15 @@ public class MainActivity extends Activity {
 			final TextView time = (TextView) findViewById(R.id.timer);
 			Long spentTime = System.currentTimeMillis() - startTime;
 			// 計算目前已過分鐘數
-			Long minius = (spentTime / 1000) / 60;
+			//Long minius = (spentTime / 1000) / 60;
 			// 計算目前已過秒數
-			Long seconds = (spentTime / 1000) % 60;
-			time.setText("計時: "+minius + ":" + seconds);
+			Long seconds = (spentTime / 1000);
+			Long reciprocal = 5 - seconds;
+			time.setText("計時: "+reciprocal);
 			handler.postDelayed(this, 1000);
+			if(reciprocal<=0){
+				time.setText("計時: 0");
+			}
 		}
 	};
 
