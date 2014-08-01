@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import net.simonvt.numberpicker.NumberPicker;
+
 import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -23,10 +25,10 @@ import android.widget.*;
 import android.view.View;
 
 public class MainActivity extends Activity {
-	/*private ImageView imageView1;
-	private ImageView imageView2;
-	private ImageView imageView3;
-	private ImageView imageView4*/;
+	/*
+	 * private ImageView imageView1; private ImageView imageView2; private
+	 * ImageView imageView3; private ImageView imageView4
+	 */;
 	private ImageView no1, no2;
 	private Bitmap chooseimage1;
 	private Bitmap chooseimage2;
@@ -41,7 +43,24 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		int[] image_group = {R.drawable.fourteen,R.drawable.hundredseventynine,R.drawable.sixtynine,R.drawable.threeseventyeight};
+		NumberPicker np1 = (NumberPicker) findViewById(R.id.numberPicker1);
+		np1.setMaxValue(9);
+		np1.setMinValue(0);
+		np1.setFocusable(true);
+		np1.setFocusableInTouchMode(true);
+		NumberPicker np2 = (NumberPicker) findViewById(R.id.numberPicker2);
+		np2.setMaxValue(9);
+		np2.setMinValue(0);
+		np2.setFocusable(true);
+		np2.setFocusableInTouchMode(true);
+		NumberPicker np3 = (NumberPicker) findViewById(R.id.numberPicker3);
+		np3.setMaxValue(9);
+		np3.setMinValue(0);
+		np3.setFocusable(true);
+		np3.setFocusableInTouchMode(true);
+		int[] image_group = { R.drawable.fourteen,
+				R.drawable.hundredseventynine, R.drawable.sixtynine,
+				R.drawable.threeseventyeight };
 		int random = (int) (Math.random() * image_group.length);
 		ImageView imageView1 = (ImageView) this.findViewById(R.id.imageView1);
 		imageView1.setOnClickListener(new ImageViewListener());
@@ -91,13 +110,13 @@ public class MainActivity extends Activity {
 		print_random.add(R.id.imageView13);
 		print_random.add(R.id.imageView14);
 		print_random.add(R.id.imageView15);
-		print_random.add(R.id.imageView16);//所有imageview的ID組
-		//取得目前時間
+		print_random.add(R.id.imageView16);// 所有imageview的ID組
+		// 取得目前時間
 		startTime = System.currentTimeMillis();
-		//設定定時要執行的方法
+		// 設定定時要執行的方法
 		handler.removeCallbacks(updateTimer);
-		//設定Delay的時間
-		handler.postDelayed(updateTimer, 1000);//時間單位是毫秒
+		// 設定Delay的時間
+		handler.postDelayed(updateTimer, 1000);// 時間單位是毫秒
 		int sw = 0;// 切圖起使位址(X軸)
 		int sh = 0;// 切圖起使位址(Y軸)
 		Bitmap origialBitmap = BitmapFactory.decodeResource(getResources(),
@@ -105,21 +124,22 @@ public class MainActivity extends Activity {
 		int w = origialBitmap.getWidth() / 4;
 		int h = origialBitmap.getHeight() / 4;
 		for (int cut_no = 0; cut_no <= 15; cut_no++) {
-			
+
 			if (sw == origialBitmap.getWidth()) {
 				sw = 0;
 				sh = sh + h;
-				
+
 			}
-			
+
 			Bitmap cutBitmap = Bitmap.createBitmap(origialBitmap, sw, sh, w, h);// 前兩是原圖起始座標,後兩個是需求截圖的大小
-			Log.i(TAG,"--"+sw+"--"+w);
-			random = (int) (Math.random() * print_random.size());		
-			ImageView random_cutimage = (ImageView) findViewById(print_random.get(random));// 隨機取任何一個imageview來呈現第一次切割的圖
+			Log.i(TAG, "--" + sw + "--" + w);
+			random = (int) (Math.random() * print_random.size());
+			ImageView random_cutimage = (ImageView) findViewById(print_random
+					.get(random));// 隨機取任何一個imageview來呈現第一次切割的圖
 			random_cutimage.setImageBitmap(cutBitmap);
 			print_random.remove(random);
 			sw = sw + w;
-			
+
 		}
 
 	}
@@ -152,17 +172,16 @@ public class MainActivity extends Activity {
 			final TextView time = (TextView) findViewById(R.id.timer);
 			Long spentTime = System.currentTimeMillis() - startTime;
 			// 計算目前已過分鐘數
-			//Long minius = (spentTime / 1000) / 60;
+			// Long minius = (spentTime / 1000) / 60;
 			// 計算目前已過秒數
 			Long seconds = (spentTime / 1000);
 			Long reciprocal = 5 - seconds;
-			time.setText("計時: "+reciprocal);
+			time.setText("計時: " + reciprocal);
 			handler.postDelayed(this, 1000);
-			if(reciprocal<=0){
+			if (reciprocal <= 0) {
 				time.setText("計時: 0");
 			}
 		}
 	};
-
 
 }
