@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.security.auth.PrivateCredentialPermission;
+
 import net.simonvt.numberpicker.NumberPicker;
 
 import android.R.integer;
@@ -38,30 +40,38 @@ public class MainActivity extends Activity {
 	private Long startTime;
 	private Handler handler = new Handler();
 	private final String TAG = "MainActivity";
+	int random;
+	int[] image_group = { R.drawable.fourteen,
+			R.drawable.hundredseventynine, R.drawable.sixtynine,
+			R.drawable.threeseventyeight };
+	int[] answer_group = {14,179,69,378};//圖庫對應答案
+	TextView textView;
+	NumberPicker np1,np2,np3;
+	Long reciprocal;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		NumberPicker np1 = (NumberPicker) findViewById(R.id.numberPicker1);
+		np1 = (NumberPicker) findViewById(R.id.numberPicker1);
 		np1.setMaxValue(9);
 		np1.setMinValue(0);
 		np1.setFocusable(true);
 		np1.setFocusableInTouchMode(true);
-		NumberPicker np2 = (NumberPicker) findViewById(R.id.numberPicker2);
+		np2 = (NumberPicker) findViewById(R.id.numberPicker2);
 		np2.setMaxValue(9);
 		np2.setMinValue(0);
 		np2.setFocusable(true);
 		np2.setFocusableInTouchMode(true);
-		NumberPicker np3 = (NumberPicker) findViewById(R.id.numberPicker3);
+		np3 = (NumberPicker) findViewById(R.id.numberPicker3);
 		np3.setMaxValue(9);
 		np3.setMinValue(0);
 		np3.setFocusable(true);
 		np3.setFocusableInTouchMode(true);
-		int[] image_group = { R.drawable.fourteen,
-				R.drawable.hundredseventynine, R.drawable.sixtynine,
-				R.drawable.threeseventyeight };
-		int random = (int) (Math.random() * image_group.length);
+		random = (int) (Math.random() * image_group.length);
+		
+		//****物件指派部分****
+		textView = (TextView)this.findViewById(R.id.textView1);
 		ImageView imageView1 = (ImageView) this.findViewById(R.id.imageView1);
 		imageView1.setOnClickListener(new ImageViewListener());
 		ImageView imageView2 = (ImageView) this.findViewById(R.id.imageView2);
@@ -94,6 +104,8 @@ public class MainActivity extends Activity {
 		imageView15.setOnClickListener(new ImageViewListener());
 		ImageView imageView16 = (ImageView) this.findViewById(R.id.imageView16);
 		imageView16.setOnClickListener(new ImageViewListener());
+		Button button = (Button)this.findViewById(R.id.button1);
+		button.setOnClickListener(new ButtonListener());
 		ArrayList<Integer> print_random = new ArrayList<Integer>();
 		print_random.add(R.id.imageView1);
 		print_random.add(R.id.imageView2);
@@ -117,6 +129,8 @@ public class MainActivity extends Activity {
 		handler.removeCallbacks(updateTimer);
 		// 設定Delay的時間
 		handler.postDelayed(updateTimer, 1000);// 時間單位是毫秒
+		
+		//****切圖部分****
 		int sw = 0;// 切圖起使位址(X軸)
 		int sh = 0;// 切圖起使位址(Y軸)
 		Bitmap origialBitmap = BitmapFactory.decodeResource(getResources(),
@@ -133,17 +147,19 @@ public class MainActivity extends Activity {
 
 			Bitmap cutBitmap = Bitmap.createBitmap(origialBitmap, sw, sh, w, h);// 前兩是原圖起始座標,後兩個是需求截圖的大小
 			Log.i(TAG, "--" + sw + "--" + w);
-			random = (int) (Math.random() * print_random.size());
+			int random1 = (int) (Math.random() * print_random.size());
 			ImageView random_cutimage = (ImageView) findViewById(print_random
-					.get(random));// 隨機取任何一個imageview來呈現第一次切割的圖
+					.get(random1));// 隨機取任何一個imageview來呈現第一次切割的圖
 			random_cutimage.setImageBitmap(cutBitmap);
-			print_random.remove(random);
+			print_random.remove(random1);
 			sw = sw + w;
 
 		}
-
+		
 	}
-
+		
+	
+	//****ImgageView點選處發事件部分****
 	private class ImageViewListener implements OnClickListener {
 		@SuppressLint("NewApi")
 		public void onClick(View v) {
@@ -164,9 +180,28 @@ public class MainActivity extends Activity {
 				no1.setImageBitmap(chooseimage2);
 				no2.setImageBitmap(chooseimage1);
 			}
+			
+	}
+	}
+	
+	//****作答部分****
+	private class ButtonListener implements OnClickListener{
+		public void onClick(View v){
+			int bit = np3.getValue();
+			int ten = np2.getValue()*10;
+			int hundred = np1.getValue()*100;
+			int give_answer = bit+ten+hundred;
+			Log.i(TAG,"-->"+give_answer);
+			Log.i(TAG,"---"+answer_group[random]);
+		if(answer_group[random]==give_answer&&reciprocal>0){
+			textView.setText("恭喜答對了!!");
+		}
+		if(answer_group[random]!=give_answer||reciprocal==0){
+			textView.setText("解圖失敗!!");
+		}
 		}
 	}
-
+	//****時間倒數部分****
 	private Runnable updateTimer = new Runnable() {
 		public void run() {
 			final TextView time = (TextView) findViewById(R.id.timer);
@@ -175,7 +210,7 @@ public class MainActivity extends Activity {
 			// Long minius = (spentTime / 1000) / 60;
 			// 計算目前已過秒數
 			Long seconds = (spentTime / 1000);
-			Long reciprocal = 5 - seconds;
+			reciprocal = 60 - seconds;
 			time.setText("計時: " + reciprocal);
 			handler.postDelayed(this, 1000);
 			if (reciprocal <= 0) {
