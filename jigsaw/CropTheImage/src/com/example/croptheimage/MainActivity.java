@@ -6,6 +6,8 @@ import java.util.TimerTask;
 
 import javax.security.auth.PrivateCredentialPermission;
 
+import come.example.base.UIBase;
+
 import net.simonvt.numberpicker.NumberPicker;
 
 import android.R.integer;
@@ -26,7 +28,7 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import android.view.View;
 
-public class MainActivity extends Activity {
+public class MainActivity extends UIBase {
 	/*
 	 * private ImageView imageView1; private ImageView imageView2; private
 	 * ImageView imageView3; private ImageView imageView4
