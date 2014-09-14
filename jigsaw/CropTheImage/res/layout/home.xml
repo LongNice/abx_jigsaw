@@ -8,6 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.croptheimage.Home" >
 
+<<<<<<< HEAD
     <LinearLayout
         android:id="@+id/home_ll_menu"
         android:layout_width="wrap_content"
@@ -54,3 +55,47 @@
         android:text="關卡挑戰" />
 
 </RelativeLayout>
+=======
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/home_ll_menu"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:text="@string/app_name"
+        android:textSize="@dimen/large_size" />
+    
+    <LinearLayout
+        android:id="@+id/home_ll_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tutorial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="@string/tutorial"
+            android:textSize="@dimen/large_size" />
+        
+        <TextView
+            android:id="@+id/start_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="@string/start_game"
+            android:textSize="@dimen/large_size" />
+        
+        <TextView
+            android:id="@+id/about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about"
+            android:textSize="@dimen/large_size" />
+
+    </LinearLayout>
+
+</RelativeLayout>
+>>>>>>> origin/master
