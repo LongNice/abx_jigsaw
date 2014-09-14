@@ -3,5 +3,12 @@
 
     <string name="app_name">CropTheImage</string>
     <string name="hello_world">Hello world!</string>
+    <string name="tutorial">遊戲教學</string>
+    <string name="start_game">關卡挑戰</string>
+    <string name="about">關於遊戲</string>
+    <string name="hard">難易度:</string>
+    <string name="challenge_point">挑戰積分:</string>
+    <string name="award_point">獎賞積分:</string>
+    
 
 </resources>
