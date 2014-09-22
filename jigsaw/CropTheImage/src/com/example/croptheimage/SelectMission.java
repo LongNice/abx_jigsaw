@@ -1,10 +1,18 @@
 package com.example.croptheimage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import com.example.adapter.MissionAdapter;
 import android.widget.AdapterView;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import come.example.base.UIBase;
@@ -60,8 +68,72 @@ public class SelectMission extends UIBase implements AdapterView.OnItemClickList
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
-		actClearAndTop(MainActivity.class);
+		// 啟動下載任務
+		new LoadImageTask(this).execute("https://lh6.googleusercontent.com/-2_iKft2oye8/VAJ_yKcebiI/AAAAAAAAD0g/rkcCMwVLdjI/s553-no/DSC_0362.JPG");
+		
 	}
 
-	
+	/**
+	 * 下載網址上的圖片
+	 * @author kawachi
+	 *
+	 */
+	class LoadImageTask extends AsyncTask<String, Integer, Bitmap> {
+
+		Bitmap bitmap = null;
+		private ProgressDialog progressDialog;
+		private Context context;
+		
+		public LoadImageTask (Context context) {
+			this.context = context;
+		}
+		
+		@Override
+	    protected void onPreExecute() {
+
+	        // 產生讀取對話框
+	        this.progressDialog = new ProgressDialog(context);
+
+	        // 設定讀取對話框文字
+	        this.progressDialog.setMessage("讀取中...");
+
+	        // 顯示讀取對話框
+	        this.progressDialog.show();
+
+	        return;
+	    }
+		
+		@Override
+		protected Bitmap doInBackground(String... param) {
+			InputStream inputStream = null;
+			try {
+                inputStream = new URL(param[0]).openStream();
+                bitmap = BitmapFactory.decodeStream(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+			return bitmap;
+		}
+		
+		@Override
+	    protected void onPostExecute(Bitmap bp) {
+	        super.onPostExecute(bp);
+	        // 如果對話框是顯示狀態則關閉對話框
+	        if (progressDialog != null) {
+	        	if (progressDialog.isShowing()) {
+	        		progressDialog.dismiss();
+	        	}
+	        }
+	        
+	        if (bp != null) {
+	        	// 將下載好的圖存放起來
+	        	MainActivity.quession = bp;
+		        actClearAndTop(MainActivity.class);
+		        Log.d("load", "image loading is ok!");
+	        } else {
+	        	Log.d("load", "image loading is NG!");
+	        }
+	    }
+	}
 }
