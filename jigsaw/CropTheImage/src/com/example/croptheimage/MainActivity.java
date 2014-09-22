@@ -1,16 +1,15 @@
 package com.example.croptheimage;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.security.auth.PrivateCredentialPermission;
-
 import come.example.base.UIBase;
-
 import net.simonvt.numberpicker.NumberPicker;
-
 import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -23,6 +22,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -35,10 +35,11 @@ import android.widget.*;
 import android.view.View;
 
 public class MainActivity extends UIBase {
+	public static Bitmap quession;
 	/*
 	 * private ImageView imageView1; private ImageView imageView2; private
 	 * ImageView imageView3; private ImageView imageView4
-	 */;
+	 */
 	private ImageView no1, no2;
 	private Bitmap chooseimage1;
 	private Bitmap chooseimage2;
@@ -62,6 +63,11 @@ public class MainActivity extends UIBase {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		// ⊿ΤΜ瓜 碞礶
+		if (quession == null) {
+			finish();
+			return;
+		}
 		np1 = (NumberPicker) findViewById(R.id.numberPicker1);
 		np1.setMaxValue(9);
 		np1.setMinValue(0);
@@ -150,7 +156,7 @@ public class MainActivity extends UIBase {
 		
 		for (int cut_no = 0; cut_no <= 15; cut_no++) {
 
-			if (sw == origialBitmap.getWidth()) {
+			if (sw >= origialBitmap.getWidth() - 1) {
 				sw = 0;
 				sh = sh + h;
 
@@ -169,47 +175,53 @@ public class MainActivity extends UIBase {
 		
 	}
 		
-	
-			//****瓜礶繦诀计场だ****
-		public Bitmap drawTextToBitmap(Context gContext,  int gResId,  String gText) {
-            Resources resources = gContext.getResources();
-            float scale = resources.getDisplayMetrics().density;
-            Bitmap bitmap = 
-                BitmapFactory.decodeResource(resources, gResId);
-           
-            android.graphics.Bitmap.Config bitmapConfig =
-                bitmap.getConfig();
-            // set default bitmap config if none
-            if(bitmapConfig == null) {
-              bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
-            }
-            // resource bitmaps are imutable, 
-            // so we need to convert it to mutable one
-            bitmap = bitmap.copy(bitmapConfig, true);
-           
-            Canvas canvas = new Canvas(bitmap);
-            // new antialised Paint
-            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            // text color - #3D3D3D
-            paint.setColor(Color.rgb(110,110, 110));
-            // text size in pixels
-            paint.setTextSize((int) (230 * scale));
-            // text shadow
-            paint.setShadowLayer(1f, 0f, 1f, Color.DKGRAY);
-           
-            // draw text to the Canvas center
-            Rect bounds = new Rect();
-            paint.getTextBounds(gText, 0, gText.length(), bounds);
-            int x = (bitmap.getWidth() - bounds.width())/6;
-            int y = (bitmap.getHeight() + bounds.height())/5;
-           
-            canvas.drawText(gText, x * scale, y * scale, paint);
-           
-            return bitmap;
-          }
+	/**
+	 * 	瓜礶繦诀计场だ
+	 * @param gContext
+	 * @param gResId
+	 * @param gText
+	 * @return
+	 */
+	public Bitmap drawTextToBitmap(Context gContext, int gResId, String gText) {
+		Resources resources = gContext.getResources();
+		float scale = resources.getDisplayMetrics().density;
+		//Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
+        Bitmap bitmap = quession;
+		android.graphics.Bitmap.Config bitmapConfig = bitmap.getConfig();
+		// set default bitmap config if none
+		if (bitmapConfig == null) {
+			bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+		}
+		// resource bitmaps are imutable,
+		// so we need to convert it to mutable one
+		bitmap = bitmap.copy(bitmapConfig, true);
 
+		Canvas canvas = new Canvas(bitmap);
+		// new antialised Paint
+		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		// text color - #3D3D3D
+		paint.setColor(Color.rgb(110, 110, 110));
+		// text size in pixels
+		paint.setTextSize((int) (230 * scale));
+		// text shadow
+		paint.setShadowLayer(1f, 0f, 1f, Color.DKGRAY);
 
-	//****ImgageView翴匡矪祇ㄆン场だ****
+		// draw text to the Canvas center
+		Rect bounds = new Rect();
+		paint.getTextBounds(gText, 0, gText.length(), bounds);
+		int x = (bitmap.getWidth() - bounds.width()) / 6;
+		int y = (bitmap.getHeight() + bounds.height()) / 5;
+
+		canvas.drawText(gText, x * scale, y * scale, paint);
+
+		return bitmap;
+	}
+
+	/**
+	 * ImgageView翴匡矪祇ㄆン场だ
+	 * @author 
+	 *
+	 */
 	private class ImageViewListener implements OnClickListener {
 		@SuppressLint("NewApi")
 		public void onClick(View v) {
@@ -230,11 +242,15 @@ public class MainActivity extends UIBase {
 				no1.setImageBitmap(chooseimage2);
 				no2.setImageBitmap(chooseimage1);
 			}
-			
-	}
+
+		}
 	}
 	
-	//****氮场だ****
+	/**
+	 * 氮场だ
+	 * @author 
+	 *
+	 */
 	private class ButtonListener implements OnClickListener{
 		public void onClick(View v){
 			int bit = np3.getValue();
@@ -251,7 +267,10 @@ public class MainActivity extends UIBase {
 		}
 		}
 	}
-	//****丁计场だ****
+
+	/**
+	 * 丁计场だ
+	 */
 	private Runnable updateTimer = new Runnable() {
 		public void run() {
 			final TextView time = (TextView) findViewById(R.id.timer);
