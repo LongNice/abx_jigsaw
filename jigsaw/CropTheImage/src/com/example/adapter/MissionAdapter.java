@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.example.croptheimage.R;
+import come.example.dataobject.MissionData;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,11 +15,11 @@ import android.widget.TextView;
 
 public class MissionAdapter extends BaseAdapter {
 
-	private ArrayList<HashMap<String,String>> list=null;
+	private ArrayList<MissionData> list=null;
 	private LayoutInflater mInflater;
 	private Context context;
 	
-	public MissionAdapter (Context context, ArrayList<HashMap<String,String>> list) {
+	public MissionAdapter (Context context, ArrayList<MissionData> list) {
 		this.context = context;
 		this.mInflater = LayoutInflater.from(context);
 		this.list = list;
@@ -55,10 +56,10 @@ public class MissionAdapter extends BaseAdapter {
 			viewTag = (ViewTag) convertView.getTag();
 		}
 		// set the information of mission.
-		viewTag.txtMission.setText(list.get(position).get("name"));
-		viewTag.txtHard.setText(list.get(position).get("hard"));
-		viewTag.txtChallengePoint.setText(list.get(position).get("challenge"));
-		viewTag.txtAwardPoint.setText(list.get(position).get("award"));
+		viewTag.txtMission.setText(list.get(position).getName());
+		viewTag.txtHard.setText(String.valueOf(list.get(position).getHardLvl()));
+		viewTag.txtChallengePoint.setText(String.valueOf(list.get(position).getCostPoint()));
+		viewTag.txtAwardPoint.setText(String.valueOf(list.get(position).getPrizePoint()));
 		
 		return convertView;
 	}

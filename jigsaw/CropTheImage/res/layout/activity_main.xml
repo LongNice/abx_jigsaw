@@ -2,6 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
+    android:background="@color/lightgray"
     android:orientation="vertical"
     tools:context="${packageName}.${activityClass}" >
 
@@ -10,6 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="請盡快解出此圖!!" />
 
         <TextView
             android:id="@+id/timer"
@@ -22,51 +30,49 @@
             android:text="計時:　00:00" />
     </RelativeLayout>
 
-    <LinearLayout
+    <TableRow
         android:id="@+id/ll_game_answer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1" >
+        android:layout_weight="2" >
 
         <net.simonvt.numberpicker.NumberPicker
             android:id="@+id/numberPicker1"
             android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginLeft="5dp" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1" />
 
         <net.simonvt.numberpicker.NumberPicker
             android:id="@+id/numberPicker2"
             android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginLeft="5dp" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1" />
 
         <net.simonvt.numberpicker.NumberPicker
             android:id="@+id/numberPicker3"
             android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginLeft="5dp" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
-            android:text="確定" />
+            android:text="確定答案" />
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="請盡快解出此圖!!" />
-    </LinearLayout>
+    </TableRow>
 
     <TableLayout
         android:id="@+id/tl_pic_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:background="@color/greenyellow"
+        android:layout_marginTop="10dp"
+        android:background="@color/ivory"
         android:padding="3dp" >
 
         <TableRow
@@ -80,7 +86,7 @@
                 android:id="@+id/imageView1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
+                android:layout_marginRight="1dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:src="@drawable/fourteen" />
@@ -89,7 +95,7 @@
                 android:id="@+id/imageView2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
+                android:layout_marginRight="1dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:src="@drawable/fourteen" />
@@ -98,7 +104,7 @@
                 android:id="@+id/imageView3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
+                android:layout_marginRight="1dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:src="@drawable/fourteen" />
@@ -116,14 +122,14 @@
             android:id="@+id/tableRow2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="1dp"
             android:layout_weight="1" >
 
             <ImageView
                 android:id="@+id/imageView5"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
+                android:layout_marginRight="1dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:src="@drawable/fourteen" />
@@ -132,7 +138,7 @@
                 android:id="@+id/imageView6"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
+                android:layout_marginRight="1dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:src="@drawable/fourteen" />
@@ -141,7 +147,7 @@
                 android:id="@+id/imageView7"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
+                android:layout_marginRight="1dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:src="@drawable/fourteen" />
@@ -159,14 +165,14 @@
             android:id="@+id/tableRow3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="1dp"
             android:layout_weight="1" >
 
             <ImageView
                 android:id="@+id/imageView9"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
+                android:layout_marginRight="1dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:src="@drawable/fourteen" />
@@ -175,7 +181,7 @@
                 android:id="@+id/imageView10"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
+                android:layout_marginRight="1dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:src="@drawable/fourteen" />
@@ -184,7 +190,7 @@
                 android:id="@+id/imageView11"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
+                android:layout_marginRight="1dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:src="@drawable/fourteen" />
@@ -208,7 +214,7 @@
                 android:id="@+id/imageView13"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
+                android:layout_marginRight="1dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:src="@drawable/fourteen" />
@@ -217,7 +223,7 @@
                 android:id="@+id/imageView14"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
+                android:layout_marginRight="1dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:src="@drawable/fourteen" />
@@ -226,7 +232,7 @@
                 android:id="@+id/imageView15"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
+                android:layout_marginRight="1dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:src="@drawable/fourteen" />

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import come.example.base.UIBase;
+import come.example.dataobject.MissionData;
 
 
 public class SelectMission extends UIBase implements AdapterView.OnItemClickListener{
@@ -34,21 +35,12 @@ public class SelectMission extends UIBase implements AdapterView.OnItemClickList
 	protected void onStart() {
 		
 		super.onStart();
-		 
-		ArrayList<HashMap<String,String>> mList =new ArrayList<HashMap<String,String>>();
-		HashMap<String,String> mMap;
-		
-		// TODO fake data
-		for(int i = 0; i < 10; i++) {
-			mMap = new HashMap<String,String>();
-			mMap.put("name", "Mission " + i);
-			mMap.put("hard", "Level " + i);
-			mMap.put("challenge", i + " P");
-			mMap.put("award", i + " P");
-			mList.add(mMap);
+		// 如果沒有關卡列表資料的話就退出此畫面。
+		if (missionList == null || missionList.isEmpty()) {
+			finish();
+			return;
 		}
-		
-		missionAdapter = new MissionAdapter(this, mList);
+		missionAdapter = new MissionAdapter(this, missionList);
 		listView.setAdapter(missionAdapter);
 		listView.setOnItemClickListener(this);
 	}
@@ -65,12 +57,16 @@ public class SelectMission extends UIBase implements AdapterView.OnItemClickList
 		super.onClick(arg0);
 	}
 
+	/**
+	 * 列表上的選項被點擊之後執行
+	 */
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+	public void onItemClick(AdapterView<?> parent, View view, int position, long rId) {
 
+		String imageUrl = missionList.get(position).getImageUrl();
 		// 啟動下載任務
-		new LoadImageTask(this).execute("https://lh6.googleusercontent.com/-2_iKft2oye8/VAJ_yKcebiI/AAAAAAAAD0g/rkcCMwVLdjI/s553-no/DSC_0362.JPG");
-		
+//		new LoadImageTask(this).execute("https://lh6.googleusercontent.com/-2_iKft2oye8/VAJ_yKcebiI/AAAAAAAAD0g/rkcCMwVLdjI/s553-no/DSC_0362.JPG");
+		new LoadImageTask(this).execute(imageUrl);
 	}
 
 	/**

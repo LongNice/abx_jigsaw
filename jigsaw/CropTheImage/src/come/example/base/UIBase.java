@@ -1,14 +1,25 @@
 package come.example.base;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import come.example.component.TelegramInterface;
+import come.example.dataobject.MissionData;
+
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 
-public class UIBase extends Activity implements OnClickListener {
+public class UIBase extends Activity implements OnClickListener, TelegramInterface {
+	
+	protected AlertDialog mAlertDialog = null;
+	protected static ArrayList<MissionData> missionList = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +71,14 @@ public class UIBase extends Activity implements OnClickListener {
 	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
     }
+
+
+	@Override
+	public boolean onParseResponse(String response) {
+		// TODO Auto-generated method stub
+		Log.d("UIBase", "onParseResponse");
+		return true;
+	}
 
 	
 }

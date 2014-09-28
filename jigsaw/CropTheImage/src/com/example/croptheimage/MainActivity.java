@@ -9,6 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.security.auth.PrivateCredentialPermission;
 import come.example.base.UIBase;
+import come.example.util.Util;
 import net.simonvt.numberpicker.NumberPicker;
 import android.R.integer;
 import android.annotation.SuppressLint;
@@ -51,9 +52,9 @@ public class MainActivity extends UIBase {
 	private Handler handler = new Handler();
 	private final String TAG = "MainActivity";
 	int random;
-	int[] image_group = { R.drawable.fourteen,
-			R.drawable.hundredseventynine, R.drawable.sixtynine,
-			R.drawable.threeseventyeight };
+//	int[] image_group = { R.drawable.fourteen,
+//			R.drawable.hundredseventynine, R.drawable.sixtynine,
+//			R.drawable.threeseventyeight };
 	//int[] answer_group = {14,179,69,378};//圖庫對應答案
 	TextView textView;
 	NumberPicker np1,np2,np3;
@@ -83,7 +84,7 @@ public class MainActivity extends UIBase {
 		np3.setMinValue(0);
 		np3.setFocusable(true);
 		np3.setFocusableInTouchMode(true);
-		random = (int) (Math.random() * image_group.length);
+//		random = (int) (Math.random() * image_group.length);
 		Random r = new Random();
 		i1 = r.nextInt(999 - 1) + 1;//圖片預畫上的隨機數字(1~999)
 		String RandomIntToImage = String.valueOf(i1);
@@ -147,46 +148,78 @@ public class MainActivity extends UIBase {
 		// 設定Delay的時間
 		handler.postDelayed(updateTimer, 1000);// 時間單位是毫秒
 		//****切圖部分****
-		int sw = 0;// 切圖起使位址(X軸)
-		int sh = 0;// 切圖起使位址(Y軸)
-		Bitmap origialBitmap = drawTextToBitmap(this,image_group[random],RandomIntToImage);
-				//BitmapFactory.decodeResource(getResources(),image_group[random]);
-		int w = origialBitmap.getWidth() / 4;
-		int h = origialBitmap.getHeight() / 4;
-		
-		for (int cut_no = 0; cut_no <= 15; cut_no++) {
+		splitImage(RandomIntToImage, print_random);
+				
+	}
 
-			if (sw >= origialBitmap.getWidth() - 1) {
-				sw = 0;
-				sh = sh + h;
-
+	/**
+	 * 圖片分割與隨機擺放處理
+	 * @param RandomIntToImage
+	 * @param print_random
+	 */
+	private void splitImage(String RandomIntToImage,
+			ArrayList<Integer> print_random) {
+		int total_num = print_random.size();
+		double num = Math.pow(total_num, 0.5);
+		if (Util.isInteger(num)) {
+			int oneD_num = (int) num;
+			int sw = 0;// 切圖起使位址(X軸)
+			int sh = 0;// 切圖起使位址(Y軸)
+			Bitmap origialBitmap = drawTextToBitmap(this, quession, RandomIntToImage);
+					//BitmapFactory.decodeResource(getResources(),image_group[random]);
+			int width = origialBitmap.getWidth(); // 計算剩餘寬度
+			int height = origialBitmap.getHeight(); //計算剩餘高度
+			int w = 0; // 切割圖片的寬度
+			int h = 0; // 切割圖片的高度
+			int colIndex; // 用於迴圈中紀錄欄
+			int rowIndex = 0; // 用於迴圈中紀錄列
+			for (int cut_no = 0; cut_no < total_num ; cut_no++) {
+				
+				colIndex = cut_no % oneD_num;
+				Util.logD("MainActivity", "width:" + width + ", height:" + height);
+				// 切割圖片的高度、寬度計算
+				h = height / (oneD_num - rowIndex);
+				if (colIndex == 0 && cut_no != 0) {
+					sw = 0;
+					sh = sh + h;
+					width = origialBitmap.getWidth();
+					rowIndex ++;
+					height -= h;
+				}
+				w = width / (oneD_num - colIndex);
+				width -= w;
+				Util.logD("MainActivity", "cut_no:" + cut_no + 
+						", colIndex: " + colIndex + 
+						", w: " + w + 
+						", h: " + h);
+				Bitmap cutBitmap = Bitmap.createBitmap(origialBitmap, sw, sh, w, h);// 前兩是原圖起始座標,後兩個是需求截圖的大小
+				sw = sw + w;
+				//Log.i(TAG, "--" + sw + "--" + w);
+				// 切割圖片後，將圖片依亂數做擺放
+				int random1 = (int) (Math.random() * print_random.size());
+				ImageView random_cutimage = (ImageView) findViewById(print_random
+						.get(random1));// 隨機取任何一個imageview來呈現第一次切割的圖
+				random_cutimage.setImageBitmap(cutBitmap);
+				print_random.remove(random1);
 			}
 
-			Bitmap cutBitmap = Bitmap.createBitmap(origialBitmap, sw, sh, w, h);// 前兩是原圖起始座標,後兩個是需求截圖的大小
-			//Log.i(TAG, "--" + sw + "--" + w);
-			int random1 = (int) (Math.random() * print_random.size());
-			ImageView random_cutimage = (ImageView) findViewById(print_random
-					.get(random1));// 隨機取任何一個imageview來呈現第一次切割的圖
-			random_cutimage.setImageBitmap(cutBitmap);
-			print_random.remove(random1);
-			sw = sw + w;
-
+		} else {
+			Util.showDialog(this, "圖片處理程序錯誤:無法生成拼圖。");
 		}
-		
 	}
 		
 	/**
 	 * 	圖片畫上隨機數字部分
 	 * @param gContext
-	 * @param gResId
+	 * @param gbmp
 	 * @param gText
 	 * @return
 	 */
-	public Bitmap drawTextToBitmap(Context gContext, int gResId, String gText) {
+	public Bitmap drawTextToBitmap(Context gContext, Bitmap gBitmap, String gText) {
 		Resources resources = gContext.getResources();
 		float scale = resources.getDisplayMetrics().density;
 		//Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
-        Bitmap bitmap = quession;
+        Bitmap bitmap = gBitmap;
 		android.graphics.Bitmap.Config bitmapConfig = bitmap.getConfig();
 		// set default bitmap config if none
 		if (bitmapConfig == null) {
@@ -218,7 +251,7 @@ public class MainActivity extends UIBase {
 	}
 
 	/**
-	 * ImgageView點選處發事件部分
+	 * ImageView點選觸處發事件部分
 	 * @author 
 	 *
 	 */
@@ -236,6 +269,7 @@ public class MainActivity extends UIBase {
 			if (choose % 2 == 0) {
 				choose_id2 = v.getId();
 				// Log.i(TAG, "--"+id2);
+				no1.setBackgroundResource(R.drawable.unselected_border);
 				no1.setBackgroundColor(Color.TRANSPARENT);
 				no2 = (ImageView) findViewById(choose_id2);
 				chooseimage2 = ((BitmapDrawable) no2.getDrawable()).getBitmap();
